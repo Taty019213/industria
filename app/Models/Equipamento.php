@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Equipamento extends Model
 {
-    use HasFactory;
-
-    protected $table = 'equipamentos';
+    public $timestamps = false;
 
     protected $fillable = [
         'nome',
@@ -17,5 +14,10 @@ class Equipamento extends Model
         'setor_id',
         'status',
     ];
+
+    public function setor()
+    {
+        return $this->belongsTo(Setor::class);
+    }
 }
 

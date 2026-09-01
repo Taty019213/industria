@@ -1,58 +1,52 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equipamentos</title>
-    <link href="https://jsdelivr.net" rel="stylesheet">
-</head>
-<body>
+@extends('layouts.app')
+@section('title', 'Lista de Equipamentos')
+@section('content')
 
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Equipamentos</h1>
-        <a href="{{ route('equipamentos.create') }}" class="btn btn-success">Novo Equipamento</a>
+<h1>Lista de equipamentos para {{ Auth::user()->name }}</h1>
+
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
     </div>
+@endif
 
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+<a class="btn btn-primary" href="{{ route('equipamentos.create') }}" role="button">Novo</a>
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Patrimônio</th>
-                <th>Setor</th>
-                <th>Status</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($equipamentos as $equipamento)
-                <tr>
-                    <td>{{ $equipamento->id }}</td>
-                    <td>{{ $equipamento->nome }}</td>
-                    <td>{{ $equipamento->patrimonio }}</td>
-                    <td>{{ $equipamento->setor_id }}</td>
-                    <td>{{ $equipamento->status }}</td>
-                    <td>
-                        <a href="{{ route('equipamentos.edit', $equipamento) }}" class="btn btn-warning btn-sm">Editar</a>
-                        
-                        <form action="{{ route('equipamentos.destroy', $equipamento) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+<table class="table">
+    <thead class="table-info">
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Patrimônio</th>
+            <th>Setor</th>
+            <th>Status</th>
+            <th>Opções</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($equipamentos as $equipamento)
+        <tr class="table-info">
+            <td>{{ $equipamento->id }}</td>
+            <td>{{ $equipamento->nome }}</td>
+            <td>{{ $equipamento->patrimonio }}</td>
+            <td>{{ $equipamento->setor_id }}</td>
+            <td>
+                {{ $equipamento->status == 'ativo' ? 'Ativado' : 'Desativado' }}
+            </td>
+            <td>
+              
+                <a class="btn btn-primary" href="{{ route('equipamentos.edit', $equipamento->id) }}" role="button">Editar</a>
+             
+                <form action="{{ route('equipamentos.destroy', $equipamento->id) }}" method="post" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</button>
+                </form>
+            </td>
+        </tr>    
+        @endforeach  
+    </tbody>
+</table>
 
-</body>
-</html>
+@endsection
+

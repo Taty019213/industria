@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title','lista de setores')
 @section('content')
-<h1>Lista de setores</h1>
+<h1>Lista de setores para {{ Auth::user()->name  }}</h1>
 <a class="btn btn-primary" href={{ route('setores.create') }} role="button">Novo</a>
 <table class="table">
     <thead class="table-info">

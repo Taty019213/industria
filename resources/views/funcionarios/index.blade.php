@@ -1,61 +1,43 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('layouts.app')
+@section('title', 'Lista de Funcionários')
+@section('content')
 
-    <title>Funcionários</title>
+<h1>Lista de funcionários para {{ Auth::user()->name }}</h1>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+<a class="btn btn-primary" href="{{ route('funcionarios.create') }}" role="button">Novo</a>
 
-<body>
+<table class="table">
+    <thead class="table-info">
+        <tr>
+            <th>Nome</th>
+            <th>Matrícula</th>
+            <th>Cargo</th>
+            <th>Setor</th>
+            <th>Opções</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($funcionarios as $funcionario)
+        <tr class="table-info">
+            <td>{{ $funcionario->nome }}</td>
+            <td>{{ $funcionario->matricula }}</td>
+            <td>{{ $funcionario->cargo }}</td>
+            <td>{{ $funcionario->setor_id }}</td>
+            <td>
+                <!-- Botão Editar -->
+                <a class="btn btn-primary" href="{{ route('funcionarios.edit', $funcionario->id) }}" role="button">Editar</a>
+                
+                <!-- Botão Excluir -->
+                <form action="{{ route('funcionarios.destroy', $funcionario->id) }}" method="post" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</button>
+                </form>
+            </td>
+        </tr>    
+        @endforeach  
+    </tbody>
+</table>
 
-<div class="container mt-5">
+@endsection
 
-    <h1 class="mb-4">Funcionários</h1>
-
-    <a href="{{ route('funcionarios.create') }}" class="btn btn-success mb-3">
-        Cadastrar Funcionário
-    </a>
-
-    <table class="table table-bordered table-striped">
-
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Matrícula</th>
-                <th>Cargo</th>
-                <th>Setor</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            @foreach($funcionarios as $funcionario)
-
-                <tr>
-                    <td>{{ $funcionario->nome }}</td>
-
-                    <td>{{ $funcionario->matricula }}</td>
-
-                    <td>{{ $funcionario->cargo }}</td>
-
-                    <td>{{ $funcionario->setor_id }}</td>
-
-                    <td>
-                        
-                    </td>
-                </tr>
-
-            @endforeach
-
-        </tbody>
-
-    </table>
-
-</div>
-
-</body>
-</html>
